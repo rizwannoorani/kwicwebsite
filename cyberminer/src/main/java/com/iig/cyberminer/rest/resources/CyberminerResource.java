@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Path("/cyberminer")
+@Path("/search")
 @Produces(MediaType.APPLICATION_JSON)
 public class CyberminerResource {
     private final AtomicLong counter;

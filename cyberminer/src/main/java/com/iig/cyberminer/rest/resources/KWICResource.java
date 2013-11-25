@@ -13,7 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Path("/kwic")
+@Path("/index")
 @Produces(MediaType.APPLICATION_JSON)
 public class KWICResource {
     private final AtomicLong counter;

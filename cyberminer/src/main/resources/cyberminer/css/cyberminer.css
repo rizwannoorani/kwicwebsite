@@ -1,0 +1,72 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#cyberminer {
+    min-height: 90%;
+}
+
+#searchBar {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#resultsDiv {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+    min-height: 100%;
+}
+
+
+
+
+
+
+
+/*Tabs Configuration*/
+s.tabsButtonSpan {
+    width: 100%;
+}
+#tabs {
+    height: 99%;
+    margin: 0;
+    background: transparent;
+    border: none;
+}
+#tabs .ui-widget-header {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #c0c0c0;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+#tabs .ui-tabs-nav {
+    text-align: center;
+}
+#tabs .ui-tabs-nav li {
+    display: inline-block;
+    float: none;
+    top: 0px;
+    margin: 0em;
+    width: 49%;
+}
+#tabs .ui-tabs-nav .ui-state-default {
+    background: transparent;
+    border: none;
+}
+#tabs .ui-tabs-nav .ui-state-active {
+    border: none;
+}
+#tabs .ui-tabs-nav .ui-state-default a {
+    color: #c0c0c0;
+}
+#tabs .ui-tabs-nav .ui-state-active a {
+    color: #459e00;
+}
+#tabs .ui-tabs-anchor {
+    width: 95%;
+    text-align: center;
+}

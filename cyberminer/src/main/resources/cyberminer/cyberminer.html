@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cyberminer</title>
+
+    <!-- Third Party JS -->
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery-data-tables/jquery.dataTables.min.js"></script>
+    <script src="js/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/cyberminer.js"></script>
+
+    <!-- Third Party CSS -->
+    <link rel="stylesheet" type="text/css" href="css/black-tie/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-data-tables/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-data-tables/jquery.dataTables_themeroller.css">
+
+    <!-- Custom JS -->
+    <link rel="stylesheet" type="text/css" href="css/cyberminer.css">
+
+</head>
+<body>
+
+<div id="tabs">
+    <ul>
+        <li><a href="#cyberminer"><span class="tabsButtonSpan">Cyberminer</span></a></li>
+        <li><a href="#kwicIndexer"><span class="tabsButtonSpan">KwicIndexer</span></a></li>
+    </ul>
+    <div id="cyberminer">
+        <div id="searchBar">
+            <input type="text">
+            <button>Search</button>
+        </div>
+        <div id="resultsDiv">
+            <!-- Table for search results -->
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Url</th>
+                        <th>Content</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="kwicIndexer">
+        <form id="indexerForm" >
+            <span>Url: </span><input type="text" id="urlInput"><br>
+            <span>Contents: </span><input type="text" id="contentInput"><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
