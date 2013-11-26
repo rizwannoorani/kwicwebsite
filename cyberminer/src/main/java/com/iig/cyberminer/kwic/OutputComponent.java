@@ -7,90 +7,74 @@
 ********************************************************************/
 package com.iig.cyberminer.kwic;
 
+import com.iig.cyberminer.db.DatabaseComponent;
+
+import java.io.*;
+import java.sql.*;
+
 public class OutputComponent
 {
-    private KwicComponent   kwicRef;
-    private LinkedQueue     queIndexedQueue;
-    private boolean         blnLocked;
+    private DatabaseComponent dbConn;
 
     // Create OutputComponent object with applet reference
     public OutputComponent(KwicComponent k)
     {
-        kwicRef = k;
-        blnLocked = false;
-        queIndexedQueue = new LinkedQueue();
-    }
-
-    // Interface - stores the current Index
-    public void processData(LinkedQueue q)
-    {
-        // save the alphabetized and merged lines
-        queIndexedQueue = q;
-
-        // print the latest indexed queue
-        printIndex();
-    }
-
-    // Interface - returns the current Index
-    public LinkedQueue getIndex()
-    {
-        return queIndexedQueue;
-    }
-
-    // Interface - lock the Index to prevent unsafe threading
-    public synchronized void lockIndex()
-    {
-        blnLocked = true;
-    }
-
-    // Interface - unlock the Index to allow access to Index
-    public synchronized void unlockIndex()
-    {
-        blnLocked = false;
-    }
-
-    // Interface - check if the Index is locked
-    public synchronized boolean isIndexLocked()
-    {
-        return blnLocked;
-    }
-
-    // Interface - prints data from a passed in LinkedQueue
-    public void printData(int intWindow, LinkedQueue lines)
-    {
-        Line    lneTemp;
-        String  strLine = new String();
-
-        // cycle through the passed lines and send to display
-        for (int i=0; i<lines.getSize(); i++)
+        // create teh database component
+        try {
+            dbConn = new DatabaseComponent();
+        }
+        catch (SQLException e)
         {
-            // reset the line
-            strLine = "";
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
 
+    // Save the keywords, urls, and thier descriptions to the database
+    public void saveData(LinkedQueue lines)
+    {
+        int     intLines = lines.getSize();
+        Line    lneTemp;
+
+        String strInsertQuery = "INSERT INTO `url_index` VALUES ";
+
+        // cycle through the passed lines and build the INSERT statement
+        for (int i=0; i<intLines; i++)
+        {
             lneTemp = (Line)lines.dequeue();
 
-            if (lneTemp.isOriginal())
-            {
-                strLine = "*";
-            }
-
-            strLine += lneTemp.toString();
-
-            lines.enqueue(lneTemp);
-            kwicRef.display(intWindow, strLine);
+            strInsertQuery += "('" +
+                lneTemp.getKeyWord() + "','" +
+                lneTemp.getURL() + "','" +
+                lneTemp.getLine() + "'," +
+                "CURRENT_TIMESTAMP),";
         }
 
-        // seperate the next set of lines by a new line
-        kwicRef.addNewLine(intWindow);
-    }
+        // remove the last comma
+        strInsertQuery = strInsertQuery.substring(0,strInsertQuery.length()-1);
 
-    // Interface - prints the lines from the IndexedQueue
-    public void printIndex()
-    {
-        // clear the index window
-        kwicRef.addNewLine(3);
+        // when duplicate keys occur update the timestamp to note the recent URL
+        strInsertQuery += " ON DUPLICATE KEY " +
+                "UPDATE Updated = CURRENT_TIMESTAMP;";
 
-        // output the index
-        this.printData(3, queIndexedQueue);
+        System.out.println(strInsertQuery);
+
+        // Execute the insert statement
+        try {
+            dbConn.executeUpdate(strInsertQuery);
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println( "You really made it!" );
     }
 }

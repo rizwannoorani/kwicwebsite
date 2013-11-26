@@ -59,14 +59,15 @@ public class LinkedQueue extends LinkedList implements Serializable
     public String toString()
     {
         String s = new String();
+        int iSize = this.size();
 
-        for(int i=0; i< this.size(); i++)
+        for(int i=0; i< iSize; i++)
         {
             String temp = (String)this.dequeue();
             s+=(temp).toString()+" ";
             this.enqueue(temp);
         }
 
-        return s;
+        return s.substring(0, s.length()-1);
     }
 }

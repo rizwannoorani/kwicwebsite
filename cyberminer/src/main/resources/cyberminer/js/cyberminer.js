@@ -21,7 +21,7 @@ $( document ).ready( function (){
             url: "cyberminer/index",
             data: indexData,
             success: function( data ) {
-                alert( "Successful post! " + data.content );
+                
             },
             dataType: "json"
         });

@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 public class ShifterComponent
 {
     // references to the alphabetizer and output components
-    private AlphabetizerComponent alphaRef;
     private OutputComponent outputRef;
 
     // thread additions
@@ -25,10 +24,8 @@ public class ShifterComponent
 
     // Create an ShifterComponent object with the Alpha and Output reference,
     // and the poolSize
-    public ShifterComponent(AlphabetizerComponent a,
-                            OutputComponent o, int poolSize)
+    public ShifterComponent(OutputComponent o, int poolSize)
     {
-        alphaRef = a;
         outputRef = o;
         intPoolSize = poolSize;
         intQueueSize = 0;
@@ -73,6 +70,8 @@ public class ShifterComponent
     // Put work in the queue to process
     public void processData(Line ln)
     {
+        System.out.println( "Shifting " + ln );
+
         // put work in the queue
         synchronized(queProcessQueue)
         {
@@ -99,11 +98,11 @@ public class ShifterComponent
     // display the output and notify the alphabetizer
     public void processComplete(LinkedQueue queTemp)
     {
-        // output the shifted lines
-        outputRef.printData(2, queTemp);
+        System.out.println( "Shifter thread has completed." );
 
-        // send the alphabetizer a list of lines
-        alphaRef.processData(queTemp);
+        // output the shifted lines
+        outputRef.saveData(queTemp);
+
         updateBusyThreads(-1);
 
         // data is still waiting so bring it in

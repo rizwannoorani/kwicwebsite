@@ -14,40 +14,82 @@ public class Line
 {
     private String      strURL;
     private String      strLine;
+    private String      strKeyWord;
     private LinkedQueue queWords;
     private int         intNumWords;
     private boolean     blnOriginal = false;
 
     // Create Storage Line object from the passed string
-    public Line(String u, String s)
+    public Line(String u, String s, String k)
     {
         strURL=u;
         strLine=s;
-        StringTokenizer stk = new StringTokenizer (strLine," ");
+        StringTokenizer stk = new StringTokenizer (k," ");
         intNumWords=stk.countTokens();
         queWords = new LinkedQueue();
 
         for(int i=0;i<intNumWords;i++)
         {
-            queWords.enqueue(stk.nextToken());
+            if (i==0)
+            {
+                strKeyWord = stk.nextToken();
+                queWords.enqueue(strKeyWord);
+            }
+            else
+            {
+                queWords.enqueue(stk.nextToken());
+            }
         }
     }
 
     // Create Storage Line object from the passed string
     // and a boolean to determine if it is an original line or not
-    public Line(String u, String s, boolean blnOrig)
+    public Line(String u, String s, String k, boolean blnOrig)
     {
         blnOriginal = blnOrig;
         strURL=u;
         strLine=s;
-        StringTokenizer stk = new StringTokenizer (strLine," ");
+        StringTokenizer stk = new StringTokenizer (k," ");
         intNumWords=stk.countTokens();
         queWords = new LinkedQueue();
 
         for(int i=0;i<intNumWords;i++)
         {
-            queWords.enqueue(stk.nextToken());
+            if (i==0)
+            {
+                strKeyWord = stk.nextToken();
+                queWords.enqueue(strKeyWord);
+            }
+            else
+            {
+                queWords.enqueue(stk.nextToken());
+            }
         }
+    }
+
+    // return the url
+    public String getURL()
+    {
+        return strURL;
+    }
+    
+    // return the original line
+    public String getLine()
+    {
+        return strLine;
+    }
+
+    // return the queWords as a string
+    @Override
+    public String toString()
+    {
+        return (String)queWords.toString();
+    }
+
+    // return the Key word for the line
+    public String getKeyWord()
+    {
+        return strKeyWord;
     }
 
     // return the words from the line
@@ -66,18 +108,5 @@ public class Line
     public boolean isOriginal()
     {
         return blnOriginal;
-    }
-
-    // return the url
-    public String getURL()
-    {
-        return strURL;
-    }
-
-    // return the original line
-    @Override
-    public String toString()
-    {
-        return strLine;
     }
 }

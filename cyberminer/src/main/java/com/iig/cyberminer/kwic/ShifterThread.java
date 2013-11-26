@@ -50,23 +50,35 @@ public class ShifterThread implements Runnable
     // Interface - shift the words from the input line
     public void run()
     {
-        if (SC.intQueueSize < 1) {
-//System.out.println("Shifter Thread should not be here: " + SC.intQueueSize);
-            return;
-        }
+        Line ln = null;
 
         // the deque here will impact the input queue
         // owned by the ShifterComponent
-        Line ln = SC.dequeue();
+        try {
+            if (SC.intQueueSize < 1)
+                return;
+            else
+                ln = SC.dequeue();
+        }
+        catch (Exception e)
+        {
+            if (e.getMessage() != null)
+                System.out.println("ShifterThread.run Exception: " +
+                    e.getMessage());
+            return;
+        }
 
         String strURL = new String();
+        String strLine = new String();
         String strTemp = new String();
 
         LinkedQueue queTemp = ln.getWordQueue();
         strURL = ln.getURL();
+        strLine = ln.getLine();
 
-        // set this line to be the original by setting the 2nd param to true
-        Line lnNew = new Line(strURL, queTemp.toString(), true);
+        // set this line to be the original by setting the 3rd param to true
+        Line lnNew = new Line(strURL, strLine, queTemp.toString(), true);
+        int  intLines = queTemp.getSize();
 
         // queShiftedLines contains lines
         queShiftedLines = new LinkedQueue();
@@ -75,10 +87,10 @@ public class ShifterThread implements Runnable
         queShiftedLines.enqueue(lnNew);
 
         // cycle through the words and save new lines
-        for (int i=0; i<queTemp.getSize()-1; i++) {
+        for (int i=0; i<intLines-1; i++) {
             strTemp=(String)queTemp.dequeue();
             queTemp.enqueue(strTemp);
-            lnNew = new Line(strURL, queTemp.toString());
+            lnNew = new Line(strURL, strLine, queTemp.toString());
 
             // filter out noise words
             if (queTemp.getFront().toString().length() < 8) {
@@ -91,7 +103,7 @@ public class ShifterThread implements Runnable
         }
 
 /**************** begin debugging output *********************/
-        System.out.println("Shifter thread: " + intThreadID);
+//        System.out.println("Shifter thread: " + intThreadID);
 /**************** end debugging output ***********************/
 
         // tell the ShifterComponent that the process is done

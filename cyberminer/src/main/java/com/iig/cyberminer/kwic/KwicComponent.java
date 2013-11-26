@@ -12,8 +12,6 @@ public class KwicComponent implements KwicInterface {
 
     // create the kwic index components
     OutputComponent output;
-    MergerComponent merger;
-    AlphabetizerComponent alpha;
     ShifterComponent shifter;
     InputComponent input;
 
@@ -33,53 +31,14 @@ public class KwicComponent implements KwicInterface {
 
         // instantiate the Kwic components
         output = new OutputComponent(this);
-        merger = new MergerComponent(output, intPoolSize);
-        alpha = new AlphabetizerComponent(merger, intPoolSize);
-        shifter = new ShifterComponent(alpha, output, intPoolSize);
+        shifter = new ShifterComponent(output, intPoolSize);
         input = new InputComponent(shifter, output, intPoolSize);
     }
 
     // Accept a url and descrtiption and then index
     public void processData(String strUrl, String strDesc) {
+        System.out.println( "Processing data where url =" + strUrl + " and desc=" + strDesc );
         URLtuple urlInput = new URLtuple(strUrl, strDesc);
         input.processData(urlInput);
-    }
-
-    // print the index
-    public void print()
-    {
-        output.printIndex();
-    }
-
-    // display the lines within the appropriate output window
-    public void display(int i, String s)
-    {
-        switch(i) {
-            case 1:
-                System.out.println("Window 1: " + s);
-            break;
-            case 2:
-                System.out.println("Window 2: " + s);
-            break;
-            case 3:
-                System.out.println("Window 3: " + s);
-            break;
-        }
-    }
-
-    // add a new line to the requested output window
-    public void addNewLine(int i)
-    {
-        switch(i) {
-            case 1:
-                System.out.println("Window 1: newline");
-            break;
-            case 2:
-                System.out.println("Window 2: newline");
-            break;
-            case 3:
-                System.out.println("Window 3: newline");
-            break;
-        }
     }
 }

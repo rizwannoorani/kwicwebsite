@@ -28,15 +28,25 @@ public class InputThread implements Runnable
     // Interface - set the line for the Input
     public void run()
     {
-        // make sure something is waiting in the queue
-        if (IC.intQueueSize < 1) {
-//System.out.println("Input Thread should not be here: " + IC.intQueueSize);
-            return;
-        }
+        System.out.println( " IM A THREAD! " );
 
+        URLtuple urlData = null;
+        
         // the deque here will impact the input queue
         // owned by the InputComponent
-        URLtuple urlData = (URLtuple)IC.dequeue();
+        try {
+            if (IC.intQueueSize < 1)
+                return;
+            else
+                urlData = (URLtuple)IC.dequeue();
+        }
+        catch (Exception e)
+        {
+            if (e.getMessage() != null)
+                System.out.println("InputThread.run Exception: " +
+                    e.getMessage());
+            return;
+        }
 
         // if the url is invalid then simply remove it from the queue
         if (!urlValidator.isValid(urlData.getURL())) {
@@ -46,13 +56,15 @@ public class InputThread implements Runnable
 
         // create the DS to store the URL and Description
         Line lneDesc = new Line(urlData.getURL(),
+                                 urlData.getDescription(),
                                  urlData.getDescription(), true);
 
-        // create the url text to be indexed
+        // parse the url text to be shifted and indexed
         String strURL = buildURLString(urlData.getURL());
 
         // create the DS to store the URL and the URL parameters
-        Line lneURL = new Line(urlData.getURL(), strURL);
+        Line lneURL = new Line(urlData.getURL(),
+                               urlData.getDescription(), strURL);
 
         // place the url and the description into the queue
         LinkedQueue queTemp = new LinkedQueue();
@@ -63,9 +75,11 @@ public class InputThread implements Runnable
         IC.processComplete(queTemp);
     }
 
+    // parse the url text to components to be shifted and indexed
     private String buildURLString(String s)
     {
-        // ex. http://video.google.co.uk:80/videoplay?docid=-7246927612831078230&hl=en#00h02m30s
+        // ex. http://video.google.co.uk:80/videoplay?docid=-7246927612831078230
+        //            &hl=en#00h02m30s
 
         String strIndexURL = new String();
         String strURL = new String();

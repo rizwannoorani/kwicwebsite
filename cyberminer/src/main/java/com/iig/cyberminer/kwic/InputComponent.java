@@ -74,6 +74,8 @@ public class InputComponent
     // Put work in the queue to process
     public void processData(URLtuple urlInput)
     {
+        System.out.println( "URLtuple = " + urlInput.toString() );
+
         // put work in the queue
         synchronized(queProcessQueue)
         {
@@ -100,9 +102,9 @@ public class InputComponent
     // display the output and notify the shifter
     public void processComplete(LinkedQueue queTemp)
     {
-        outputRef.printData(1, queTemp);
+        System.out.println( "Input thread has completed." );
 
-        // send a line to the shifter component
+        // send the line and url to the shifter component
         shifterRef.processData((Line)queTemp.dequeue());
         shifterRef.processData((Line)queTemp.dequeue());
 
