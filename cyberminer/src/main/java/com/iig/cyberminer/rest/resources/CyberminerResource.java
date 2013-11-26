@@ -6,11 +6,7 @@ import com.iig.cyberminer.search.CyberminerService;
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -35,8 +31,11 @@ public class CyberminerResource {
 
     @POST
     public CyberminerResponse getSearchResults(@FormParam("queryType") String type, @FormParam("queryString") String query ) {
-        return new CyberminerResponse(
-            counter.incrementAndGet(),
-            cyberminer.getSearchResults(type, query));
+        try {
+            System.out.println( "Received post to indexer w/ type =" + type + " and query=" + query );
+            return new CyberminerResponse( counter.incrementAndGet(), cyberminer.getSearchResults( type, query ) );
+        } catch( Exception e ) {
+            return new CyberminerResponse( counter.incrementAndGet(), "Unable to process search." );
+        }
     }
 }

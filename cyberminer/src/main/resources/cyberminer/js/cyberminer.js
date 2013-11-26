@@ -21,7 +21,24 @@ $( document ).ready( function (){
             url: "cyberminer/index",
             data: indexData,
             success: function( data ) {
-                
+
+            },
+            dataType: "json"
+        });
+    });
+
+    $( "#searchButton").click( function( event ) {
+        var searchData = {
+            queryType: $( "#queryTypeCombo" ).val(),
+            queryString: $( "#searchText" ).val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "cyberminer/search",
+            data: searchData,
+            success: function( data ) {
+
             },
             dataType: "json"
         });

@@ -1,3 +1,5 @@
+package com.iig.cyberminer.search;
+
 import java.util.ArrayList;
 import java.util.Collections;
 

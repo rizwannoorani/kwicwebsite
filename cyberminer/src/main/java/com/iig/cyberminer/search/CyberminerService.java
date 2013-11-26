@@ -1,13 +1,16 @@
 package com.iig.cyberminer.search;
 
+import java.util.ArrayList;
+
 public class CyberminerService {
 
-	String queryString;
-	String queryType;
+	private ParserComponent parseComp;
+	private String queryString;
+	private String queryType;
 	
 	public CyberminerService()
 	{
-		ParseComponent parseComp = new ParseComponent();
+		parseComp = new ParserComponent();
 		//QueryComonent queryComp = new QueryComponent();
 		//MergerComponent
 	}

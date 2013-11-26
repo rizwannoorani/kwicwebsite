@@ -23,8 +23,6 @@ public class CyberminerApplication extends Service<CyberminerConfiguration> {
     @Override
     public void run(CyberminerConfiguration configuration,
                     Environment environment) {
-        final String template = configuration.getTemplate();
-        final String defaultName = configuration.getDefaultName();
 
         environment.addResource(new CyberminerResource());
         environment.addResource(new KWICResource());
