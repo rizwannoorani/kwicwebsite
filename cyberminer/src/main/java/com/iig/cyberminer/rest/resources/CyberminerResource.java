@@ -34,9 +34,9 @@ public class CyberminerResource {
     }
 
     @POST
-    public CyberminerResponse getSearchResults( ) {
+    public CyberminerResponse getSearchResults(@FormParam("queryType") String type, @FormParam("queryString") String query ) {
         return new CyberminerResponse(
             counter.incrementAndGet(),
-            cyberminer.getSearchResults());
+            cyberminer.getSearchResults(type, query));
     }
 }
