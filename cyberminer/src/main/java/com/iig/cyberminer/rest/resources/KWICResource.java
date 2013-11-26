@@ -1,27 +1,23 @@
 package com.iig.cyberminer.rest.resources;
 
-import com.iig.cyberminer.kwic.KwicService;
+import com.iig.cyberminer.kwic.KwicComponent;
 import com.iig.cyberminer.rest.representations.KWICResponse;
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import java.util.concurrent.atomic.AtomicLong;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("/index")
 @Produces(MediaType.APPLICATION_JSON)
 public class KWICResource {
     private final AtomicLong counter;
-    private final KwicService kwic;
+    private final KwicComponent kwicComponent;
 
     public KWICResource() {
         this.counter = new AtomicLong();
-        kwic = new KwicService(); //pass in db info here?
+        kwicComponent = new KwicComponent(5);
     }
 
     @GET
@@ -33,9 +29,13 @@ public class KWICResource {
     }
 
     @POST
-    public KWICResponse addToIndex( ) {
-        return new KWICResponse(
-            counter.incrementAndGet(),
-            kwic.processData( "url", "content" ));
+    public KWICResponse addToIndex(@FormParam("url") String url, @FormParam("contents") String contents ) {
+        try {
+            System.out.println( "Received post to indexer w/ url =" + url + " and contents=" + contents );
+            kwicComponent.processData( url, contents );
+            return new KWICResponse( counter.incrementAndGet(), "Successfully added to KWIC index." );
+        } catch( Exception e ) {
+            return new KWICResponse( counter.incrementAndGet(), "Unable to add to KWIC index." );
+        }
     }
 }
