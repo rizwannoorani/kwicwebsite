@@ -38,15 +38,32 @@ $( document ).ready( function (){
             url: "cyberminer/search",
             data: searchData,
             success: function( data ) {
+                $( "#resultsTable").dataTable().fnClearTable();
 
+                for( url in data.content ) {
+                    console.log( "Adding result. " + url + ":" + data.content[url] );
+                    $( "#resultsTable").dataTable().fnAddData( {
+                        0: url,
+                        1: data.content[url]
+                    } );
+                }
             },
             dataType: "json"
         });
     });
 
-    $( "#resultsTable").dataTable( {
+    $( "#resultsTable" ).dataTable( {
         "bFilter": false,
         "bJQueryUI": true,
         "bPaginate": false
     });
+
+    var searchField = $( "#searchText" );
+    searchField.keydown( function( event ) {
+        if( event.keyCode == 13 ) {
+            $( "#searchButton" ).click();
+        }
+    } );
+
+    searchField.focus();
 });

@@ -1,6 +1,8 @@
 package com.iig.cyberminer.rest.resources;
 
+import com.iig.cyberminer.rest.representations.CyberminerFailure;
 import com.iig.cyberminer.rest.representations.CyberminerResponse;
+import com.iig.cyberminer.rest.representations.CyberminerSuccess;
 import com.iig.cyberminer.search.CyberminerService;
 
 import com.google.common.base.Optional;
@@ -24,7 +26,7 @@ public class CyberminerResource {
     @GET
     @Timed
     public CyberminerResponse sayHello(@QueryParam("name") Optional<String> name) {
-        return new CyberminerResponse(
+        return new CyberminerFailure(
             counter.incrementAndGet(),
             "Post to this endpoint with search query.");
     }
@@ -32,10 +34,10 @@ public class CyberminerResource {
     @POST
     public CyberminerResponse getSearchResults(@FormParam("queryType") String type, @FormParam("queryString") String query ) {
         try {
-            System.out.println( "Received post to indexer w/ type =" + type + " and query=" + query );
-            return new CyberminerResponse( counter.incrementAndGet(), cyberminer.getSearchResults( type, query ) );
+            System.out.println( "Received post to search w/ type =" + type + " and query=" + query );
+            return new CyberminerSuccess( counter.incrementAndGet(), cyberminer.getSearchResults( type, query ) );
         } catch( Exception e ) {
-            return new CyberminerResponse( counter.incrementAndGet(), "Unable to process search." );
+            return new CyberminerFailure( counter.incrementAndGet(), "Unable to process search." );
         }
     }
 }
