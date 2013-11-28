@@ -1,9 +1,11 @@
 package com.iig.cyberminer.search;
 
+import com.iig.cyberminer.kwic.NoiseFilter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
-
+//NoiseFilter, isNoiseWord return bool
 public class ParserComponent {
 
 	public ArrayList<String> processData(String search)
@@ -14,10 +16,13 @@ public class ParserComponent {
 		
 		Collections.addAll(result, split);
 		
-//		for(int i = 0; i < split.length; i++)
-//		{
-//			result.add(split[i]);
-//		}
+		for(int i = 0; i < result.size(); i++)
+		{
+			if(NoiseFilter.isNoiseWord(result.get(i)))
+			{
+				result.remove(i);
+			}
+		}
 		
 		return result;
 	}

@@ -7,81 +7,88 @@ import com.iig.cyberminer.kwic.QueryResult;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 
 public class QueryComponent {
-	
-	private Map<String,String> queryResult; 
-	private ArrayList<String> queryValues;
-	private String searchType ;
 	private DatabaseComponent dbComp; 
 	
 	//Constructor
-	QueryComponent(ArrayList<String> inputValues, String queryType){
-		this.queryValues = inputValues;
-		this.searchType = queryType;
-		this.queryResult = new HashMap<String,String>();
+	QueryComponent() {
 		try {
 			this.dbComp = new DatabaseComponent();
-			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println( "Error creating DB component." );
 			e.printStackTrace();
-		} 
+			this.dbComp = null;
+		}
 	}
 
 	//This function produces Map of URL and description for the calling class
-	public Map<String,String> processData(){
-		
+	public Map<String,String> processData( ArrayList<String> inputValues, String queryType ){
+		if( this.dbComp == null ) {
+			System.out.println( "Database is not configured. Skipping query for: " + inputValues );
+			return null;
+		}
+
+		Map<String,String> queryResult = new ConcurrentHashMap<String,String>();
+
 		String queryString = null; 
-		if (this.searchType.equalsIgnoreCase("and") || this.searchType.equalsIgnoreCase("or"))
-			queryString = this.getAndOrQueryString();
-		else 
-			queryString = this.getNotQueryString();
-			try{
-				if (queryString != null){
+		if (queryType.equalsIgnoreCase("and") || queryType.equalsIgnoreCase("or")) {
+			queryString = getAndOrQueryString( inputValues );
+		} else if( queryType.equalsIgnoreCase("not") ) { 
+			queryString = getNotQueryString( inputValues );
+		} else {
+			System.out.println( "Unrecognized query type. Exiting query." );
+			return null;
+		}
+
+		try{
+			if (queryString != null) {
 				LinkedQueue result = dbComp.executeSelect(queryString);
-				for (int i = 0 ; i < result.size() ; ++i){
+				for (int i = 0 ; i < result.size() ; ++i) {
 					QueryResult rslt = (QueryResult) result.get(i);
-					if (!this.queryResult.containsKey(rslt.getURL()))
-						this.queryResult.put(rslt.getURL(), rslt.getDescription());
+					if (!queryResult.containsKey(rslt.getURL()))
+						queryResult.put(rslt.getURL(), rslt.getDescription());
 				}
-			 }	
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		
+			}	
+		} catch(Exception e) {
+			System.out.println( "Error running query." );
+			e.printStackTrace();
+			return null;
+		}
 	 
-		return this.queryResult;
-	
+		return queryResult;	
    }
 	
 	//This function process the input keyword array into a executable query string for and/or logic and return it to processData()
-	private String getAndOrQueryString(){
+	private String getAndOrQueryString( ArrayList<String> queryValues ){
 		String queryString = null;
-		if (this.queryValues != null){
-			queryString = this.queryValues.toString().replaceAll(", ","','");
+		if (queryValues != null){
+			queryString = queryValues.toString().replaceAll(", ","','");
 			queryString = queryString.replaceAll("\\[(.*?)\\]", "$1");
 			queryString = "SELECT * FROM URL_INDEX WHERE WORD IN ('"+queryString+"')";
 		}
+		
+		System.out.println( "AND/OR query string: " + queryString );
 		
 		return queryString;
 	}
 	
 	//This function process the input keyword array into a executable query string for not logic and return it to processData()
-	private String getNotQueryString(){
+	private String getNotQueryString( ArrayList<String> queryValues ){
 		String queryString = null ;
-		if (this.queryValues.size() > 0){
+		if (queryValues.size() > 0){
 			queryString = "SELECT * FROM URL_INDEX "
-					+ "	WHERE WORD NOT LIKE '%"+this.queryValues.get(0)+"%'";
-			for (int i = 1 ; i < this.queryValues.size() ; ++ i){
-				queryString += " And Word NOT LIKE "+"'%"+this.queryValues.get(i)+"%'";
+					+ "	WHERE WORD NOT LIKE '%"+queryValues.get(0)+"%'";
+			for (int i = 1 ; i < queryValues.size() ; ++ i){
+				queryString += " And Word NOT LIKE "+"'%"+queryValues.get(i)+"%'";
 			}
 		}	
 		
+		System.out.println( "NOT query string: " + queryString );
 		
 		return queryString;
 	}

@@ -6,11 +6,6 @@ $( document ).ready( function (){
     $( "#indexerForm" ).submit( function( event ) {
         event.preventDefault();
 
-        //do ajax call here and display submission status
-//        $.post( "cyberminer/index", function( data ) {
-//            alert( data.content );
-//        } );
-
         var indexData = {
             url: $( "#urlInput" ).val(),
             contents: $( "#contentInput" ).val()
@@ -21,7 +16,8 @@ $( document ).ready( function (){
             url: "cyberminer/index",
             data: indexData,
             success: function( data ) {
-
+                $( "#urlInput" ).val( "" );
+                $( "#contentInput" ).val( "" );
             },
             dataType: "json"
         });

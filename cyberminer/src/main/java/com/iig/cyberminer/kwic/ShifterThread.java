@@ -1,11 +1,4 @@
-/********************************************************************
- *  Program:          KWIC
- *  Programmer:       Dan Modesto
- *  Purpose:          Thread to shift lines.
- *  File              ShifterThread.java
- *  Date:             10/07/2013
-********************************************************************/
-package KwicIndexer;
+package com.iig.cyberminer.kwic;
 
 public class ShifterThread implements Runnable
 {

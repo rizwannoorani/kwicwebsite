@@ -37,7 +37,8 @@ public class CyberminerResource {
             System.out.println( "Received post to search w/ type =" + type + " and query=" + query );
             return new CyberminerSuccess( counter.incrementAndGet(), cyberminer.getSearchResults( type, query ) );
         } catch( Exception e ) {
-            return new CyberminerFailure( counter.incrementAndGet(), "Unable to process search." );
+            e.printStackTrace();
+            return null;
         }
     }
 }

@@ -7,25 +7,29 @@ import java.util.Map;
 public class CyberminerService {
 
 	private ParserComponent parseComp;
+	private QueryComponent queryComp;
+	private MergeComponent mergeComp;
 
 	public CyberminerService() {
 		parseComp = new ParserComponent();
-		//QueryComonent queryComp = new QueryComponent();
-		//MergerComponent
+		queryComp = new QueryComponent();
+		mergeComp = new MergeComponent();
 	}
 	
 	public Map<String, String> getSearchResults(String type, String query) {
+        if( query.equals( "" ) ) {
+            return new HashMap<String, String>();
+        }
+
 		ArrayList<String> parsedArray = parseComp.processData( query );
 
-		//Map<String, String> queryResult = queryComp.processData(parsedArray);
+		Map<String, String> queryResults = queryComp.processData( parsedArray, type );
+		if( queryResults == null ) {
+			throw new RuntimeException( "Error encountered retrieving query results." );
+		} else {
+			System.out.println( "Results retrieved: " + queryResults.toString() );
+		}
 
-		//mergerComponent process data
-
-		//Returning test data to get back out to UI
-		Map<String, String> resultsMap = new HashMap<String, String>();
-		resultsMap.put( "www.a.com", "For all of your finest A needs." );
-		resultsMap.put( "www.b.net", "The black hole of the internet." );
-
-		return resultsMap;
+		return mergeComp.processData( queryResults, type, parsedArray );
 	}
 }
