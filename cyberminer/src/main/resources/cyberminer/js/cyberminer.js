@@ -39,7 +39,7 @@ $( document ).ready( function (){
                 for( url in data.content ) {
                     console.log( "Adding result. " + url + ":" + data.content[url] );
                     $( "#resultsTable").dataTable().fnAddData( {
-                        0: url,
+                        0: "<a href='" + url + "'>" + url + "</a>",
                         1: data.content[url]
                     } );
                 }
