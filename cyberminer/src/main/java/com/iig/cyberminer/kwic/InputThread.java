@@ -5,7 +5,7 @@
  *  File              InputThread.java
  *  Date:             10/07/2013
 ********************************************************************/
-package KwicIndexer;
+package com.iig.cyberminer.kwic;
 
 import org.apache.commons.validator.routines.UrlValidator;
 

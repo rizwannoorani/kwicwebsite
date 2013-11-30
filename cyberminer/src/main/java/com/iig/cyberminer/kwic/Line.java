@@ -6,7 +6,7 @@
  *  File              Line.java
  *  Date:             9/24/2013
 ********************************************************************/
-package KwicIndexer;
+package com.iig.cyberminer.kwic;
 
 import java.util.*;
 
