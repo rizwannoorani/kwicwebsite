@@ -5,7 +5,7 @@
  *  File              InputThread.java
  *  Date:             10/07/2013
 ********************************************************************/
-package com.iig.cyberminer.kwic;
+package KwicIndexer;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
@@ -28,8 +28,6 @@ public class InputThread implements Runnable
     // Interface - set the line for the Input
     public void run()
     {
-        System.out.println( " IM A THREAD! " );
-
         URLtuple urlData = null;
         
         // the deque here will impact the input queue
@@ -104,16 +102,28 @@ public class InputThread implements Runnable
             strIndexURL += " " + strURL;
         }
 
+        String strTemp = "";
+
         // remove directories
         while(strURL.indexOf("/")>0)
         {
+            strTemp = strURL.substring(strURL.lastIndexOf("/")+1,
+                    strURL.length());
+
+            if (strTemp.contains("."))
+            {
+                strTemp = strTemp.substring(0,strTemp.indexOf("."));
+            }
+
+            strIndexURL += " " + strTemp;
+            
             strURL = strURL.substring(0,strURL.lastIndexOf("/"));
             strIndexURL += " " + strURL;
         }
 
         //ex. strHostname = video.google.co.uk:80
         String strHostname = new String();
-        String strTemp = strURL;        
+        strTemp = strURL;        
 
         // remove the subdomain, usually www
         // ex. video.google.co.uk:80 google.co.uk:80

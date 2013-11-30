@@ -6,7 +6,7 @@
  *  File              Line.java
  *  Date:             9/24/2013
 ********************************************************************/
-package com.iig.cyberminer.kwic;
+package KwicIndexer;
 
 import java.util.*;
 
@@ -32,7 +32,8 @@ public class Line
         {
             if (i==0)
             {
-                strKeyWord = stk.nextToken();
+                strKeyWord = stk.nextToken().replaceAll("([a-z]+)[?:!.,;]*$",
+                        "$1");
                 queWords.enqueue(strKeyWord);
             }
             else
@@ -57,7 +58,8 @@ public class Line
         {
             if (i==0)
             {
-                strKeyWord = stk.nextToken();
+                strKeyWord = stk.nextToken().replaceAll("([a-z]+)[?:!.,;]*$",
+                        "$1");
                 queWords.enqueue(strKeyWord);
             }
             else
