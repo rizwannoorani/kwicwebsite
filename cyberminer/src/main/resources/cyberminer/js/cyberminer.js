@@ -51,7 +51,7 @@ $( document ).ready( function (){
     $( "#resultsTable" ).dataTable( {
         "bFilter": false,
         "bJQueryUI": true,
-        "bPaginate": false
+        "sPaginationType": "full_numbers"
     });
 
     var searchField = $( "#searchText" );
